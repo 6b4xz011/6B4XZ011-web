@@ -1,59 +1,95 @@
 import streamlit as st
-import pandas as pd
-import folium
-from streamlit_folium import st_folium
 
-# 頁面標題與風格
-st.set_page_config(page_title="府城漫遊：台南觀光懶人包", layout="wide")
+# --- 頁面設定 ---
+st.set_page_config(page_title="欣玫戴 | Executive Profile", page_icon="🏢", layout="wide")
 
-st.title("🏯 台南旅遊觀光小幫手")
-st.markdown("---")
+# --- 注入自定義 CSS (Vibe Control) ---
+st.markdown("""
+    <style>
+    .main {
+        background-color: #0e1117;
+        color: #ffffff;
+    }
+    .stButton>button {
+        width: 100%;
+        border-radius: 20px;
+        background-color: #ff4b4b;
+        color: white;
+    }
+    .service-card {
+        background-color: #262730;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #ff4b4b;
+        margin-bottom: 10px;
+    }
+    .hero-text {
+        text-align: center;
+        padding: 2rem 0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-# 1. 準備資料庫 (美食與娛樂)
-data = {
-    '名稱': ['國華街美食區', '赤崁樓', '安平古堡', '神農街', '奇美博物館', '文章牛肉湯'],
-    '類型': ['美食', '娛樂/古蹟', '娛樂/古蹟', '娛樂/文創', '娛樂/藝術', '美食'],
-    '緯度': [22.9934, 22.9975, 23.0018, 22.9972, 22.9348, 23.0006],
-    '經度': [120.1969, 120.2025, 120.1610, 120.1965, 120.2260, 120.1654],
-    '描述': ['必吃：肉燥飯、春捲、割包', '荷蘭時期至今的古蹟', '台灣歷史最悠久的城堡', '台南最老街區，適合拍網美照', '絕美的純白建築與藝術收藏', '台南必吃招牌溫體牛肉湯']
-}
-df = pd.DataFrame(data)
+# --- 側邊欄：聯絡資訊 ---
+with st.sidebar:
+    st.image("https://via.placeholder.com/150", caption="欣玫戴 Hsin-Mei Tai") # 建議替換為實際頭像
+    st.title("聯絡資訊")
+    st.write("📧 [6b4xz011@stust.edu.tw](mailto:6b4xz011@stust.edu.tw)")
+    st.write("📞 080-0779779")
+    st.write("📍 台南市永康區 (南台娛樂)")
+    
+    st.divider()
+    
+    # 社群連結
+    st.markdown("[![Facebook](https://img.shields.io/badge/Facebook-欣玫戴-1877F2?style=for-the-badge&logo=facebook)](https://www.facebook.com/keepbusytsai)")
 
-# 2. 側邊欄過濾器
-st.sidebar.header("🗺️ 我想去哪裡？")
-category = st.sidebar.multiselect("選擇類型：", options=['美食', '娛樂/古蹟', '娛樂/文創', '娛樂/藝術'], default=['美食', '娛樂/古蹟'])
+# --- 主視覺區域 ---
+st.markdown("""
+    <div class="hero-text">
+        <h1 style='font-size: 3rem;'>欣玫戴 <span style='color: #ff4b4b;'>Hsin-Mei Tai</span></h1>
+        <h3 style='opacity: 0.8;'>南台娯樂有限公司 | 執行長 (CEO)</h3>
+        <p style='font-size: 1.2rem; font-style: italic; color: #a0a0a0;'>
+            「引領數位潮流，創造娛樂新標竿。」
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-# 根據選擇過濾資料
-filtered_df = df[df['類型'].isin(category)]
+st.divider()
 
-# 3. 網頁內容佈局
-col1, col2 = st.columns([1, 2])
+# --- 核心服務內容 ---
+col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("📍 熱門景點清單")
-    for index, row in filtered_df.iterrows():
-        with st.expander(f"**{row['名稱']}**"):
-            st.write(f"🏷️ 分類: {row['類型']}")
-            st.write(f"📝 {row['描述']}")
+    st.subheader("💡 核心服務項目")
+    services = [
+        ("🌐 數位轉型顧問", "為企業量身打造雲端架構與自動化流程。"),
+        ("📱 跨平台 App 開發", "極致性能與流暢 UI/UX 的完美結合。"),
+        ("🔍 數據分析與 SEO", "精準定位客群，提升品牌網路曝光率。"),
+        ("⚡ 網路資安防護", "全方位的資訊安全監測與防禦系統。")
+    ]
+    
+    for title, desc in services:
+        st.markdown(f"""
+            <div class="service-card">
+                <strong>{title}</strong><br>
+                <small>{desc}</small>
+            </div>
+            """, unsafe_allow_html=True)
 
 with col2:
-    st.subheader("🗺️ 互動地圖")
-    # 初始化地圖 (中心點設在台南市區)
-    m = folium.Map(location=[22.997, 120.200], zoom_start=13)
+    st.subheader("🎯 品牌宣傳標語")
+    st.info("**「南台娛樂，讓世界看見您的不凡。」**")
+    st.success("**「用科技驅動娛樂，用專業定義未來。」**")
+    st.warning("**「您的數位願景，由我們實踐。」**")
     
-    # 加入標記
-    for index, row in filtered_df.iterrows():
-        icon_color = 'red' if '美食' in row['類型'] else 'blue'
-        folium.Marker(
-            [row['緯度'], row['經度']],
-            popup=row['名稱'],
-            tooltip=row['名稱'],
-            icon=folium.Icon(color=icon_color, icon='info-sign')
-        ).add_to(m)
-    
-    # 顯示地圖
-    st_folium(m, width=700, height=500)
+    st.subheader("📈 經營理念")
+    st.write("""
+    身為南台娯樂有限公司的執行長，欣玫致力於將最前衛的網路技術與娛樂產業深度結合。
+    我們不只提供服務，我們提供的是轉型與成長的動力。
+    """)
 
-# 4. 實用小撇步
-st.markdown("---")
-st.info("💡 **給第一次來台南的觀光客：** 台南的大部分美食都在中西區（國華街、海安路附近），建議租借機車或搭乘市區公車，步行距離可能比想像中遠喔！")
+# --- 底部呼籲 ---
+st.divider()
+st.button("點擊與我聯繫 / 預約諮詢")
+
+st.markdown("<center style='opacity: 0.5;'>© 2024 南台娯樂有限公司. All Rights Reserved.</center>", unsafe_allow_html=True)
