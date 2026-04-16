@@ -1,95 +1,95 @@
 import streamlit as st
+import folium
+from streamlit_folium import st_folium
 
-# --- 頁面設定 ---
-st.set_page_config(page_title="欣玫戴 | Executive Profile", page_icon="🏢", layout="wide")
+# --- 頁面配置 ---
+st.set_page_config(page_title="Tainan Élégance | 台南優雅漫步", page_icon="🍷", layout="wide")
 
-# --- 注入自定義 CSS (Vibe Control) ---
-st.markdown("""
-    <style>
-    .main {
-        background-color: #0e1117;
-        color: #ffffff;
-    }
-    .stButton>button {
-        width: 100%;
-        border-radius: 20px;
-        background-color: #ff4b4b;
-        color: white;
-    }
-    .service-card {
-        background-color: #262730;
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 5px solid #ff4b4b;
-        margin-bottom: 10px;
-    }
-    .hero-text {
-        text-align: center;
-        padding: 2rem 0;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-# --- 側邊欄：聯絡資訊 ---
+# --- 側邊欄：優雅的聯絡方式 ---
 with st.sidebar:
-    st.image("https://via.placeholder.com/150", caption="欣玫戴 Hsin-Mei Tai") # 建議替換為實際頭像
-    st.title("聯絡資訊")
-    st.write("📧 [6b4xz011@stust.edu.tw](mailto:6b4xz011@stust.edu.tw)")
-    st.write("📞 080-0779779")
-    st.write("📍 台南市永康區 (南台娛樂)")
-    
-    st.divider()
-    
-    # 社群連結
-    st.markdown("[![Facebook](https://img.shields.io/badge/Facebook-欣玫戴-1877F2?style=for-the-badge&logo=facebook)](https://www.facebook.com/keepbusytsai)")
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("### 🕊️ *L'Explorateur*")
+    st.write("---")
+    st.markdown("**聯絡諮詢**")
+    st.write("📧 6b4xz011@stust.edu.tw")
+    st.markdown("[![FB](https://img.shields.io/badge/Facebook-KeepbusyTsai-9A8C98?style=for-the-badge)](https://www.facebook.com/keepbusytsai)")
+    st.write("---")
+    st.markdown("### *Philosophie*")
+    st.markdown("*「旅行不是尋找新的風景，而是擁有新的眼光。」*")
 
 # --- 主視覺區域 ---
-st.markdown("""
-    <div class="hero-text">
-        <h1 style='font-size: 3rem;'>欣玫戴 <span style='color: #ff4b4b;'>Hsin-Mei Tai</span></h1>
-        <h3 style='opacity: 0.8;'>南台娯樂有限公司 | 執行長 (CEO)</h3>
-        <p style='font-size: 1.2rem; font-style: italic; color: #a0a0a0;'>
-            「引領數位潮流，創造娛樂新標竿。」
-        </p>
+st.markdown('<div class="main-header">TAINAN · ÉLÉGANCE</div>', unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-family: serif; font-size: 1.1rem; color: #9A8C98;'>一場關於莫蘭迪色調與府城記憶的溫柔對話</p>", unsafe_allow_html=True)
+
+# --- 整合地圖與視覺亮點 ---
+m_col, d_col = st.columns([1.5, 1])
+
+with m_col:
+    # 使用莫蘭迪色調的地圖樣式
+    m = folium.Map(location=[22.9975, 120.18], zoom_start=13, tiles="CartoDB Positron")
+    
+    # 景點標註
+    points = [
+        {"name": "奇美博物館", "pos": [22.9348, 120.2260], "color": "#D4B2A7"},
+        {"name": "國華街美食", "pos": [22.9961, 120.1979], "color": "#84A59D"},
+        {"name": "神農街", "pos": [22.9972, 120.1966], "color": "#9A8C98"}
+    ]
+    for p in points:
+        folium.CircleMarker(
+            location=p["pos"], radius=8, color=p["color"], fill=True, popup=p["name"]
+        ).add_to(m)
+    
+    st_folium(m, width="100%", height=400)
+
+with d_col:
+    st.markdown("### *Sélection d'Art* 必訪清單")
+    st.markdown("""
+    - **國華街美食**：味覺的極致優雅
+    - **安平古堡**：歷史遺留的溫潤紅磚
+    - **奇美博物館**：台南的凡爾賽宮
+    """)
+    st.image("https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=80", caption="Gourmet Tainan")
+
+# --- 行程區 (法式排版) ---
+st.markdown("<br><h2 style='text-align: center;'>ITINÉRAIRE · 行程設計</h2>", unsafe_allow_html=True)
+
+t1, t2, t3 = st.tabs(["L'Essentiel 一日", "La Culture 二日", "La Vie 三日"])
+
+with t1:
+    st.markdown("""
+    <div class="vibe-card">
+        <h3>時光靜好 · 一日輕旅行</h3>
+        <p><span class="time-tag">Matin</span> 於老宅享用牛肉湯，感受府城的甦醒</p>
+        <p><span class="time-tag">Après-midi</span> 散步於神農街，在工藝小店尋寶</p>
+        <p><span class="time-tag">Soirée</span> 觀夕平台，看夕陽沒入溫柔的海面</p>
+        <div class="quote-box">
+            「台南的步調，適合用來讀一本好書，或談一場無事的戀愛。」— <em>旅人 A推薦</em>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
-st.divider()
+with t2:
+    st.markdown("""
+    <div class="vibe-card">
+        <h3>藝術陶冶 · 二日深旅</h3>
+        <p><strong>Premier Jour:</strong> 走訪孔廟園區，品嚐莉莉水果冰的清甜。</p>
+        <p><strong>Deuxième Jour:</strong> 沉浸於奇美博物館的西洋藝術收藏。</p>
+        <div class="quote-box">
+            「在這裡，時間彷彿被調慢了速度。」— <em>藝術評論家 B</em>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-# --- 核心服務內容 ---
-col1, col2 = st.columns(2)
+with t3:
+    st.markdown("""
+    <div class="vibe-card">
+        <h3>漫活府城 · 三日漫遊</h3>
+        <p><strong>完整導覽:</strong> 從市區的小巷、安平的潮汐，到北門的鹽田。每一處都是莫蘭迪色調的完美體現。</p>
+        <div class="quote-box">
+            「這不是一場觀光，而是一場靈魂的洗滌。」— <em>生活風格家 C</em>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-with col1:
-    st.subheader("💡 核心服務項目")
-    services = [
-        ("🌐 數位轉型顧問", "為企業量身打造雲端架構與自動化流程。"),
-        ("📱 跨平台 App 開發", "極致性能與流暢 UI/UX 的完美結合。"),
-        ("🔍 數據分析與 SEO", "精準定位客群，提升品牌網路曝光率。"),
-        ("⚡ 網路資安防護", "全方位的資訊安全監測與防禦系統。")
-    ]
-    
-    for title, desc in services:
-        st.markdown(f"""
-            <div class="service-card">
-                <strong>{title}</strong><br>
-                <small>{desc}</small>
-            </div>
-            """, unsafe_allow_html=True)
-
-with col2:
-    st.subheader("🎯 品牌宣傳標語")
-    st.info("**「南台娛樂，讓世界看見您的不凡。」**")
-    st.success("**「用科技驅動娛樂，用專業定義未來。」**")
-    st.warning("**「您的數位願景，由我們實踐。」**")
-    
-    st.subheader("📈 經營理念")
-    st.write("""
-    身為南台娯樂有限公司的執行長，欣玫致力於將最前衛的網路技術與娛樂產業深度結合。
-    我們不只提供服務，我們提供的是轉型與成長的動力。
-    """)
-
-# --- 底部呼籲 ---
-st.divider()
-st.button("點擊與我聯繫 / 預約諮詢")
-
-st.markdown("<center style='opacity: 0.5;'>© 2024 南台娯樂有限公司. All Rights Reserved.</center>", unsafe_allow_html=True)
+# --- Footer ---
+st.markdown("<center style='opacity: 0.6; font-family: serif;'>C'est la vie. 南台娛樂 | 執行長 欣玫戴 監製</center>", unsafe_allow_html=True)
